@@ -6,78 +6,24 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Client-Info, Apikey',
 };
 
-const disposableDomains = new Set([
-  'tempmail.com', 'guerrillamail.com', '10minutemail.com', 'mailinator.com',
-  'throwaway.email', 'maildrop.cc', 'yopmail.com', 'temp-mail.org',
-  'getnada.com', 'trashmail.com', 'fakeinbox.com', 'sharklasers.com'
-]);
+const BACKEND_URL = Deno.env.get('REACHER_BACKEND_URL') || 'http://localhost:8080';
 
-const roleAccounts = new Set([
-  'admin', 'support', 'info', 'sales', 'contact', 'help', 'webmaster',
-  'postmaster', 'noreply', 'no-reply', 'abuse', 'marketing', 'hello'
-]);
+async function validateEmail(email: string): Promise<any> {
+  const response = await fetch(`${BACKEND_URL}/v0/check_email`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      to_email: email,
+    }),
+  });
 
-function validateEmailSyntax(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-function parseEmail(email: string): { username: string; domain: string } {
-  const [username, domain] = email.toLowerCase().split('@');
-  return { username, domain };
-}
-
-async function checkMXRecords(domain: string): Promise<{ exists: boolean; records: string[] }> {
-  try {
-    const response = await fetch(`https://dns.google/resolve?name=${domain}&type=MX`);
-    const data = await response.json();
-    
-    if (data.Answer && data.Answer.length > 0) {
-      const records = data.Answer.map((record: any) => record.data.split(' ')[1]);
-      return { exists: true, records };
-    }
-    return { exists: false, records: [] };
-  } catch {
-    return { exists: false, records: [] };
-  }
-}
-
-async function validateEmail(email: string) {
-  const isValidSyntax = validateEmailSyntax(email);
-  
-  if (!isValidSyntax) {
-    return {
-      input: email,
-      is_reachable: 'invalid',
-      syntax: { username: '', domain: '', is_valid_syntax: false },
-      mx: { accepts_mail: false, records: [] },
-      misc: { is_disposable: false, is_role_account: false },
-    };
+  if (!response.ok) {
+    throw new Error(`Backend returned ${response.status}`);
   }
 
-  const { username, domain } = parseEmail(email);
-  const isDisposable = disposableDomains.has(domain);
-  const isRoleAccount = roleAccounts.has(username);
-  
-  const mxCheck = await checkMXRecords(domain);
-  
-  let isReachable: 'safe' | 'risky' | 'invalid' | 'unknown' = 'unknown';
-  
-  if (!mxCheck.exists) {
-    isReachable = 'invalid';
-  } else if (isDisposable || isRoleAccount) {
-    isReachable = 'risky';
-  } else {
-    isReachable = 'safe';
-  }
-
-  return {
-    input: email,
-    is_reachable: isReachable,
-    syntax: { username, domain, is_valid_syntax: true },
-    mx: { accepts_mail: mxCheck.exists, records: mxCheck.records },
-    misc: { is_disposable: isDisposable, is_role_account: isRoleAccount },
-  };
+  return await response.json();
 }
 
 async function processEmails(jobId: string, emails: string[], supabase: any) {

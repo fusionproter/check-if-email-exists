@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  reacher-backend:
+    image: reacherhq/backend:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - RUST_LOG=reacher=info
+      - RCH__HTTP_HOST=0.0.0.0
+      - RCH__HTTP_PORT=8080
+      - RCH__HELLO_NAME=localhost
+      - RCH__FROM_EMAIL=noreply@localhost
+      # Disable worker for simple setup
+      - RCH__WORKER__ENABLE=false
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
