@@ -1,0 +1,18 @@
+{
+  "name": "email-validator-saas",
+  "version": "1.0.0",
+  "description": "Email validation SaaS application",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && cargo run",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && cargo build --release",
+    "deploy:backend": "cd backend && flyctl deploy",
+    "deploy:frontend": "cd frontend && vercel --prod",
+    "deploy": "npm run deploy:backend && npm run deploy:frontend",
+    "setup": "cd frontend && npm install"
+  },
+  "keywords": ["email", "validation", "saas", "rust", "react"],
+  "author": "",
+  "license": "MIT"
+}

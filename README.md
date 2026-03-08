@@ -1,173 +1,244 @@
-[![Crate](https://img.shields.io/crates/v/check-if-email-exists.svg)](https://crates.io/crates/check-if-email-exists)
-[![Docs](https://docs.rs/check-if-email-exists/badge.svg)](https://docs.rs/check-if-email-exists)
-[![Docker](https://img.shields.io/docker/v/reacherhq/backend?color=0db7ed&label=docker&sort=date)](https://hub.docker.com/r/reacherhq/backend)
-[![Actions Status](https://github.com/reacherhq/check-if-email-exists/workflows/pr/badge.svg)](https://github.com/reacherhq/check-if-email-exists/actions)
+# 📧 Email Validator - SaaS en Ligne
 
-<br /><br />
+> **Validez des milliers d'emails en quelques clics. Interface moderne, API puissante, déploiement gratuit.**
 
-<p align="center"><img align="center" src="https://storage.googleapis.com/saasify-uploads-prod/696e287ad79f0e0352bc201b36d701849f7d55e7.svg" height="96" alt="reacher" /></p>
-<h1 align="center">check-if-email-exists</h1>
-<h4 align="center">Check if an email address exists without sending any email.<br/>Comes with a <a href="./backend">⚙️ HTTP backend</a>.</h4>
+[![Deploy](https://img.shields.io/badge/deploy-ready-brightgreen)]()
+[![License](https://img.shields.io/badge/license-MIT-blue)]()
+[![Rust](https://img.shields.io/badge/rust-stable-orange)]()
+[![React](https://img.shields.io/badge/react-19-blue)]()
 
-<br /><br /><br />
+![Email Validator](https://via.placeholder.com/800x400/667eea/ffffff?text=Email+Validator+SaaS)
 
-## 👉 Live Demo:- https://reacher.email
+## ✨ Fonctionnalités
 
-<img src="https://storage.googleapis.com/saasify-uploads-prod/696e287ad79f0e0352bc201b36d701849f7d55e7.svg" height="68" align="left" />
+- 🎯 **Validation Unique** - Vérification détaillée d'un seul email
+- 📊 **Validation en Masse** - Jusqu'à 50,000 emails via CSV ou texte
+- ⚡ **Temps Réel** - Suivi de progression live avec statistiques
+- 📥 **Export CSV** - Téléchargez tous vos résultats
+- 🎨 **Interface Moderne** - Design responsive et intuitif
+- 🔐 **Vérification Complète** - Syntaxe, MX, SMTP, disposable, role accounts
+- 🌍 **Déployable en 10 min** - Sur Vercel + Fly.io gratuitement
 
-This is open-source, but I also offer a **SaaS** solution that has `check-if-email-exists` packaged in a nice friendly web interface. If you are interested, find out more at [Reacher](https://reacher.email/?ref=github). If you have any questions, you can contact me at amaury@reacher.email.
+## 🚀 Démarrage Rapide
 
-<br />
-
-## Get Started
-
-3 non-SaaS ways to get started with `check-if-email-exists`.
-
-### 1. ⚙️ HTTP backend using Docker (popular method 🥇) [[Full docs](./backend/README.md)]
-
-This option allows you to run a HTTP backend using Docker 🐳, on a cloud instance or your own server. Please note that outbound port 25 must be open.
+### Option 1: Déployer en Ligne (10 minutes)
 
 ```bash
-docker run -p 8080:8080 reacherhq/backend:latest
+# 1. Installer Fly CLI
+curl -L https://fly.io/install.sh | sh
+
+# 2. Déployer le backend
+cd backend
+flyctl launch && flyctl deploy
+
+# 3. Déployer le frontend sur Vercel
+# Importez le repo sur vercel.com
+# Ajoutez VITE_API_URL avec l'URL Fly.io
 ```
 
-Then send a `POST http://localhost:8080/v0/check_email` request with the following body:
+**📖 Guide complet**: [START_HERE.md](./START_HERE.md)
 
-```js
+### Option 2: Développement Local
+
+```bash
+# Terminal 1 - Backend
+cd backend && cargo run
+
+# Terminal 2 - Frontend
+cd frontend && npm install && npm run dev
+```
+
+Ouvrez http://localhost:5173
+
+## 📸 Captures d'Écran
+
+### Validation Unique
+Validation détaillée avec informations complètes:
+- ✅ Syntaxe valide
+- ✅ Serveurs MX configurés
+- ✅ Boîte mail accessible
+- ⚠️ Détection catch-all, disposable, role accounts
+
+### Validation en Masse
+- 📂 Upload CSV ou texte
+- 📊 Progress bar temps réel
+- 📈 Statistiques: Deliverable / Risky / Invalid / Unknown
+- 💾 Export complet en CSV
+
+## 🏗️ Architecture
+
+```
+┌─────────────┐      HTTPS      ┌──────────────┐
+│   Vercel    │ ←------------→  │   Fly.io     │
+│  (Frontend) │                 │  (Backend)   │
+│  React App  │                 │   Rust API   │
+└─────────────┘                 └──────────────┘
+```
+
+**Stack Technique**:
+- **Backend**: Rust, Warp, check-if-email-exists
+- **Frontend**: React 19, Vite 7
+- **Database**: Supabase (optionnel)
+- **Hosting**: Vercel (frontend) + Fly.io (backend)
+- **Coût**: Gratuit!
+
+## 📚 Documentation
+
+| Guide | Description |
+|-------|-------------|
+| **[START_HERE.md](./START_HERE.md)** | 👈 **Commencez ici!** |
+| [DEPLOY_RAPIDE.md](./DEPLOY_RAPIDE.md) | Déploiement en 10 minutes |
+| [DEPLOY_ONLINE.md](./DEPLOY_ONLINE.md) | Guide de déploiement complet |
+| [DEMARRAGE.md](./DEMARRAGE.md) | Guide avec checklist |
+| [LIENS_UTILES.md](./LIENS_UTILES.md) | Commandes et ressources |
+| [README_SAAS.md](./README_SAAS.md) | Documentation technique |
+
+## 🎯 API Endpoints
+
+### Validation Unique
+```bash
+POST /v1/check_email
 {
-    "to_email": "someone@gmail.com",
-    "proxy": {                        // (optional) SOCK5 proxy to run the verification through, default is empty
-        "host": "my-proxy.io",
-        "port": 1080,
-        "username": "me",             // (optional) Proxy username
-        "password": "pass"            // (optional) Proxy password
-    }
+  "to_email": "test@example.com"
 }
 ```
 
-### 2. Download the CLI [[Full docs](./cli/README.md)]
-
-> Note: The CLI binary doesn't connect to any backend, it checks the email directly from your computer.
-
-Head to the [releases page](https://github.com/reacherhq/check-if-email-exists/releases) and download the binary for your platform.
-
+### Validation Bulk
 ```bash
-> $ check_if_email_exists --help
-check_if_email_exists 0.9.1
-Check if an email address exists without sending an email.
+# Créer un job
+POST /v1/bulk
+{
+  "input": ["email1@example.com", "email2@example.com"]
+}
 
-USAGE:
-    check_if_email_exists [FLAGS] [OPTIONS] [TO_EMAIL]
+# Vérifier la progression
+GET /v1/bulk/{job_id}
+
+# Télécharger les résultats
+GET /v1/bulk/{job_id}/results?format=csv
 ```
 
-Check out the [dedicated README.md](./cli/README.md) for all options and flags.
+## 🔍 Validation Détaillée
 
-### 3. Programmatic Usage [[Full docs](https://docs.rs/check-if-email-exists)]
+Chaque email est vérifié pour:
 
-In your own Rust project, you can add `check-if-email-exists` in your `Cargo.toml`:
+| Vérification | Description |
+|--------------|-------------|
+| ✅ **Syntaxe** | Format RFC-compliant |
+| ✅ **MX Records** | Serveurs mail configurés |
+| ✅ **SMTP** | Connexion au serveur et vérification de la boîte |
+| ⚠️ **Catch-all** | Domaine accepte tous les emails |
+| ⚠️ **Disposable** | Service d'email temporaire |
+| ⚠️ **Role Account** | Adresse générique (admin@, info@, etc.) |
 
+### Résultats
+
+- **Deliverable** - Email valide et livrable ✅
+- **Risky** - Email existe mais propriétés suspectes ⚠️
+- **Undeliverable** - Email n'existe pas ❌
+- **Unknown** - Vérification impossible ❓
+
+## 💰 Coûts
+
+### Plan Gratuit
+
+- **Fly.io**: 3 apps, 160GB/mois
+- **Vercel**: Bande passante illimitée
+- **GitHub**: Repos illimités
+
+**Suffisant pour**: Projets persos, petites entreprises, portfolios
+
+### Scaling
+
+Si vous dépassez les limites gratuites:
+- **Fly.io**: ~$5-10/mois
+- **Vercel**: Pro si nécessaire (rare)
+
+## 🔧 Commandes Utiles
+
+```bash
+# Développement
+npm run dev:frontend    # Démarre le frontend
+npm run dev:backend     # Démarre le backend
+
+# Build
+npm run build:frontend  # Build le frontend
+npm run build:backend   # Build le backend
+
+# Déploiement
+npm run deploy:frontend # Déploie sur Vercel
+npm run deploy:backend  # Déploie sur Fly.io
+npm run deploy          # Déploie tout
+
+# Debug
+flyctl logs            # Logs backend
+flyctl status          # Status backend
+```
+
+## 🌟 Fonctionnalités Avancées
+
+### Domaine Personnalisé
+
+**Vercel**: Settings → Domains → Ajoutez `votredomaine.com`  
+**Fly.io**: `flyctl certs add votredomaine.com`
+
+### Rate Limiting
+
+Configure dans `backend/backend_config.toml`:
 ```toml
-[dependencies]
-check-if-email-exists = "0.9"
+[throttle]
+max_requests_per_minute = 100
+max_requests_per_day = 10000
 ```
 
-And use it in your code as follows:
+### Base de Données
 
-```rust
-use check_if_email_exists::{check_email, CheckEmailInput, CheckEmailInputProxy};
-
-async fn check() {
-    // Let's say we want to test the deliverability of someone@gmail.com.
-    let mut input = CheckEmailInput::new(vec!["someone@gmail.com".into()]);
-
-    // Verify this email, using async/await syntax.
-    let result = check_email(&input).await;
-
-    // `result` is a `Vec<CheckEmailOutput>`, where the CheckEmailOutput
-    // struct contains all information about our email.
-    println!("{:?}", result);
-}
+Active PostgreSQL pour stocker l'historique:
+```bash
+flyctl postgres create
+flyctl postgres attach
 ```
 
-The reference docs are hosted on [docs.rs](https://docs.rs/check-if-email-exists).
+## 🤝 Contribution
 
-## ✈️ JSON Output
+Les contributions sont les bienvenues!
 
-The output will be a JSON with the below format, the fields should be self-explanatory. For `someone@gmail.com` (note that it is disabled by Gmail), here's the exact output:
+1. Fork le projet
+2. Créez une branche: `git checkout -b feature/ma-feature`
+3. Commit: `git commit -m 'Ajout feature'`
+4. Push: `git push origin feature/ma-feature`
+5. Ouvrez une Pull Request
 
-```json
-{
-	"input": "someone@gmail.com",
-	"is_reachable": "invalid",
-	"misc": {
-		"is_disposable": false,
-		"is_role_account": false,
-		"is_b2c": true
-	},
-	"mx": {
-		"accepts_mail": true,
-		"records": [
-			"alt3.gmail-smtp-in.l.google.com.",
-			"gmail-smtp-in.l.google.com.",
-			"alt1.gmail-smtp-in.l.google.com.",
-			"alt4.gmail-smtp-in.l.google.com.",
-			"alt2.gmail-smtp-in.l.google.com."
-		]
-	},
-	"smtp": {
-		"can_connect_smtp": true,
-		"has_full_inbox": false,
-		"is_catch_all": false,
-		"is_deliverable": false,
-		"is_disabled": true
-	},
-	"syntax": {
-		"domain": "gmail.com",
-		"is_valid_syntax": true,
-		"username": "someone",
-		"suggestion": null
-	}
-}
-```
+## 📄 License
 
-## What Does This Tool Check?
+MIT License - Voir [LICENSE.md](LICENSE.md)
 
-| Included? | Feature                                       | Description                                                                                                                     | JSON field                                                                |
-| --------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| ✅        | **Email reachability**                        | How confident are we in sending an email to this address? Can be one of `safe`, `risky`, `invalid` or `unknown`.                | `is_reachable`                                                            |
-| ✅        | **Syntax validation**                         | Is the address syntactically valid?                                                                                             | `syntax.is_valid_syntax`                                                  |
-| ✅        | **DNS records validation**                    | Does the domain of the email address have valid MX DNS records?                                                                 | `mx.accepts_mail`                                                         |
-| ✅        | **Disposable email address (DEA) validation** | Is the address provided by a known [disposable email address](https://en.wikipedia.org/wiki/Disposable_email_address) provider? | `misc.is_disposable`                                                      |
-| ✅        | **SMTP server validation**                    | Can the mail exchanger of the email address domain be contacted successfully?                                                   | `smtp.can_connect_smtp`                                                   |
-| ✅        | **Email deliverability**                      | Is an email sent to this address deliverable?                                                                                   | `smtp.is_deliverable`                                                     |
-| ✅        | **Mailbox disabled**                          | Has this email address been disabled by the email provider?                                                                     | `smtp.is_disabled`                                                        |
-| ✅        | **Full inbox**                                | Is the inbox of this mailbox full?                                                                                              | `smtp.has_full_inbox`                                                     |
-| ✅        | **Catch-all address**                         | Is this email address a [catch-all](https://debounce.io/blog/help/what-is-a-catch-all-or-accept-all/) address?                  | `smtp.is_catch_all`                                                       |
-| ✅        | **Role account validation**                   | Is the email address a well-known role account?                                                                                 | `misc.is_role_account`                                                    |
-| ✅        | **Gravatar Url**                              | The url of the [Gravatar](https://gravatar.com/) email address profile picture                                                  | `misc.gravatar_url`                                                       |
-| ✅        | **Have I Been Pwned?**                        | Has this email been compromised in a [data breach](https://haveibeenpwned.com/)?                                                | `misc.haveibeenpwned`                                                     |
-| 🔜        | **Free email provider check**                 | Is the email address bound to a known free email provider?                                                                      | [Issue #89](https://github.com/reacherhq/check-if-email-exists/issues/89) |
-| 🔜        | **Syntax validation, provider-specific**      | According to the syntactic rules of the target mail provider, is the address syntactically valid?                               | [Issue #90](https://github.com/reacherhq/check-if-email-exists/issues/90) |
-| 🔜        | **Honeypot detection**                        | Does email address under test hide a [honeypot](https://en.wikipedia.org/wiki/Spamtrap)?                                        | [Issue #91](https://github.com/reacherhq/check-if-email-exists/issues/91) |
+## 🆘 Support
 
-## 🤔 Why?
+- 📖 **Documentation**: Voir les guides ci-dessus
+- 🐛 **Bug**: Ouvrez une issue
+- 💬 **Questions**: Discussions GitHub
+- 📧 **Email**: support@votredomaine.com
 
-Many online services (https://hunter.io, https://verify-email.org, https://email-checker.net) offer this service for a paid fee. Here is an open-source alternative to those tools.
+## 🎓 Ressources
 
-## License
+- [Documentation Fly.io](https://fly.io/docs)
+- [Documentation Vercel](https://vercel.com/docs)
+- [Rust Book](https://doc.rust-lang.org/book/)
+- [React Docs](https://react.dev)
 
-`check-if-email-exists`'s source code is provided under a **dual license model**.
+## ⭐ Star le Projet
 
-### Commercial license
+Si ce projet vous aide, donnez-lui une étoile! ⭐
 
-If you want to use `check-if-email-exists` to develop commercial sites, tools, and applications, the Commercial License is the appropriate license. With this option, your source code is kept proprietary. Purchase a `check-if-email-exists` Commercial License at https://reacher.email/pricing.
+---
 
-### Open source license
+<div align="center">
 
-If you are creating an open-source application under a license compatible with the GNU Affero GPL License v3, you may use `check-if-email-exists` under the terms of the [AGPL-3.0](./LICENSE.AGPL).
+**[Commencer Maintenant](./START_HERE.md)** | 
+**[Documentation](./README_SAAS.md)** | 
+**[Déployer](./DEPLOY_RAPIDE.md)**
 
-[➡️ Read more](https://docs.reacher.email/self-hosting/licensing) about Reacher's license.
+Fait avec ❤️ et Rust 🦀
 
-## 🔨 Build From Source
-
-Build the [CLI from source](./cli/README.md#build-from-source) or the [HTTP backend from source](./backend/README.md#build-from-source).
+</div>
