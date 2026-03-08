@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import BulkResults from './BulkResults';
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://0ec90b57d6e95fcbda19832f.supabase.co';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw';
 
 function BulkValidation() {
   const [emails, setEmails] = useState('');
@@ -24,7 +25,11 @@ function BulkValidation() {
 
   const checkProgress = async () => {
     try {
-      const response = await fetch(`${API_URL}/v1/bulk/${jobId}`);
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/bulk-status?job_id=${jobId}`, {
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+      });
       if (!response.ok) throw new Error('Failed to check progress');
 
       const data = await response.json();
@@ -77,10 +82,11 @@ function BulkValidation() {
     setProgress(null);
 
     try {
-      const response = await fetch(`${API_URL}/v1/bulk`, {
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/bulk-validate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({
           input: emailList,

@@ -1,244 +1,190 @@
-# 📧 Email Validator - SaaS en Ligne
+# 📧 Email Validator - SaaS Prêt à Déployer
 
-> **Validez des milliers d'emails en quelques clics. Interface moderne, API puissante, déploiement gratuit.**
+> Application web moderne de validation d'emails. Déployez en 1 clic depuis Bolt!
 
-[![Deploy](https://img.shields.io/badge/deploy-ready-brightgreen)]()
-[![License](https://img.shields.io/badge/license-MIT-blue)]()
-[![Rust](https://img.shields.io/badge/rust-stable-orange)]()
-[![React](https://img.shields.io/badge/react-19-blue)]()
-
-![Email Validator](https://via.placeholder.com/800x400/667eea/ffffff?text=Email+Validator+SaaS)
+[![Supabase](https://img.shields.io/badge/Powered%20by-Supabase-green)]()
+[![React](https://img.shields.io/badge/React-19-blue)]()
+[![Vite](https://img.shields.io/badge/Vite-7-purple)]()
 
 ## ✨ Fonctionnalités
 
-- 🎯 **Validation Unique** - Vérification détaillée d'un seul email
-- 📊 **Validation en Masse** - Jusqu'à 50,000 emails via CSV ou texte
-- ⚡ **Temps Réel** - Suivi de progression live avec statistiques
+- 🎯 **Validation Unique** - Vérification détaillée d'un email
+- 📊 **Validation en Masse** - Jusqu'à 50,000 emails (CSV ou texte)
+- ⚡ **Temps Réel** - Progression live avec statistiques
 - 📥 **Export CSV** - Téléchargez tous vos résultats
 - 🎨 **Interface Moderne** - Design responsive et intuitif
-- 🔐 **Vérification Complète** - Syntaxe, MX, SMTP, disposable, role accounts
-- 🌍 **Déployable en 10 min** - Sur Vercel + Fly.io gratuitement
+- 🔒 **100% Gratuit** - Hébergement et API inclus
 
-## 🚀 Démarrage Rapide
+## 🚀 Déploiement (1 clic!)
 
-### Option 1: Déployer en Ligne (10 minutes)
+### Depuis Bolt
 
-```bash
-# 1. Installer Fly CLI
-curl -L https://fly.io/install.sh | sh
+1. Cliquez sur **"Deploy"** en haut à droite
+2. Sélectionnez **Netlify** ou **Vercel**
+3. **C'est tout!** 🎉
 
-# 2. Déployer le backend
-cd backend
-flyctl launch && flyctl deploy
-
-# 3. Déployer le frontend sur Vercel
-# Importez le repo sur vercel.com
-# Ajoutez VITE_API_URL avec l'URL Fly.io
-```
-
-**📖 Guide complet**: [START_HERE.md](./START_HERE.md)
-
-### Option 2: Développement Local
+### Alternative: Ligne de Commande
 
 ```bash
-# Terminal 1 - Backend
-cd backend && cargo run
+# Frontend
+cd frontend
+npm install
+npm run build
+npx netlify-cli deploy --prod --dir=dist
 
-# Terminal 2 - Frontend
-cd frontend && npm install && npm run dev
+# OU avec Vercel
+npx vercel --prod
 ```
 
-Ouvrez http://localhost:5173
+**📖 Guide complet**: [DEPLOIEMENT_BOLT.md](./DEPLOIEMENT_BOLT.md)
 
-## 📸 Captures d'Écran
-
-### Validation Unique
-Validation détaillée avec informations complètes:
-- ✅ Syntaxe valide
-- ✅ Serveurs MX configurés
-- ✅ Boîte mail accessible
-- ⚠️ Détection catch-all, disposable, role accounts
-
-### Validation en Masse
-- 📂 Upload CSV ou texte
-- 📊 Progress bar temps réel
-- 📈 Statistiques: Deliverable / Risky / Invalid / Unknown
-- 💾 Export complet en CSV
-
-## 🏗️ Architecture
-
-```
-┌─────────────┐      HTTPS      ┌──────────────┐
-│   Vercel    │ ←------------→  │   Fly.io     │
-│  (Frontend) │                 │  (Backend)   │
-│  React App  │                 │   Rust API   │
-└─────────────┘                 └──────────────┘
-```
-
-**Stack Technique**:
-- **Backend**: Rust, Warp, check-if-email-exists
-- **Frontend**: React 19, Vite 7
-- **Database**: Supabase (optionnel)
-- **Hosting**: Vercel (frontend) + Fly.io (backend)
-- **Coût**: Gratuit!
-
-## 📚 Documentation
-
-| Guide | Description |
-|-------|-------------|
-| **[START_HERE.md](./START_HERE.md)** | 👈 **Commencez ici!** |
-| [DEPLOY_RAPIDE.md](./DEPLOY_RAPIDE.md) | Déploiement en 10 minutes |
-| [DEPLOY_ONLINE.md](./DEPLOY_ONLINE.md) | Guide de déploiement complet |
-| [DEMARRAGE.md](./DEMARRAGE.md) | Guide avec checklist |
-| [LIENS_UTILES.md](./LIENS_UTILES.md) | Commandes et ressources |
-| [README_SAAS.md](./README_SAAS.md) | Documentation technique |
-
-## 🎯 API Endpoints
-
-### Validation Unique
-```bash
-POST /v1/check_email
-{
-  "to_email": "test@example.com"
-}
-```
-
-### Validation Bulk
-```bash
-# Créer un job
-POST /v1/bulk
-{
-  "input": ["email1@example.com", "email2@example.com"]
-}
-
-# Vérifier la progression
-GET /v1/bulk/{job_id}
-
-# Télécharger les résultats
-GET /v1/bulk/{job_id}/results?format=csv
-```
-
-## 🔍 Validation Détaillée
+## 🎯 Validation Complète
 
 Chaque email est vérifié pour:
 
 | Vérification | Description |
 |--------------|-------------|
-| ✅ **Syntaxe** | Format RFC-compliant |
-| ✅ **MX Records** | Serveurs mail configurés |
-| ✅ **SMTP** | Connexion au serveur et vérification de la boîte |
-| ⚠️ **Catch-all** | Domaine accepte tous les emails |
-| ⚠️ **Disposable** | Service d'email temporaire |
-| ⚠️ **Role Account** | Adresse générique (admin@, info@, etc.) |
+| ✅ Syntaxe | Format RFC valide |
+| ✅ MX Records | Serveurs mail configurés |
+| ⚠️ Jetable | Emails temporaires (Mailinator, etc.) |
+| ⚠️ Rôle | Comptes génériques (admin@, info@, etc.) |
 
 ### Résultats
 
-- **Deliverable** - Email valide et livrable ✅
-- **Risky** - Email existe mais propriétés suspectes ⚠️
-- **Undeliverable** - Email n'existe pas ❌
-- **Unknown** - Vérification impossible ❓
+- **Safe (Deliverable)** - Email valide et livrable ✅
+- **Risky** - Email existe mais suspect ⚠️
+- **Invalid** - Email n'existe pas ❌
+- **Unknown** - Impossible à vérifier ❓
+
+## 💻 Architecture
+
+```
+React Frontend (Vite)
+       ↓
+Supabase Edge Functions (Deno)
+       ↓
+Supabase Database (PostgreSQL)
+```
+
+**Tout est hébergé sur Supabase = Aucun serveur à gérer!**
+
+## 🧪 Tester Localement
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Ouvrez http://localhost:5173
+
+## 📁 Structure
+
+```
+.
+├── frontend/              # Application React
+│   ├── src/
+│   │   ├── components/   # Composants UI
+│   │   ├── App.jsx       # Application principale
+│   │   └── App.css       # Styles
+│   └── dist/             # Build de production
+├── supabase/
+│   └── functions/        # Edge Functions (Backend)
+│       ├── validate-email/
+│       ├── bulk-validate/
+│       ├── bulk-status/
+│       └── bulk-results/
+└── DEPLOIEMENT_BOLT.md   # 👈 Guide de déploiement
+```
+
+## 🎨 Captures d'Écran
+
+### Validation Unique
+- Syntaxe, MX records, détection jetable/rôle
+- Résultats détaillés instantanés
+
+### Validation en Masse
+- Upload CSV ou saisie directe
+- Progress bar temps réel
+- Stats: Deliverable/Risky/Invalid
+- Export complet en CSV
+
+## 🔧 Personnalisation
+
+### Design
+Modifiez `frontend/src/App.css` pour changer les couleurs, polices, etc.
+
+### Logique de Validation
+Éditez les Edge Functions dans `supabase/functions/`
+
+### Ajouter des Domaines Jetables
+Mettez à jour `disposableDomains` dans `validate-email/index.ts`
 
 ## 💰 Coûts
 
-### Plan Gratuit
+**100% GRATUIT** avec Supabase:
+- Edge Functions: 500,000 invocations/mois
+- Database: 500 MB
+- Bandwidth: 5 GB/mois
 
-- **Fly.io**: 3 apps, 160GB/mois
-- **Vercel**: Bande passante illimitée
-- **GitHub**: Repos illimités
+Largement suffisant pour:
+- Projets personnels
+- Petites entreprises
+- Démos et portfolios
 
-**Suffisant pour**: Projets persos, petites entreprises, portfolios
+## 📊 Endpoints API
 
-### Scaling
+Tous les endpoints sont déjà déployés:
 
-Si vous dépassez les limites gratuites:
-- **Fly.io**: ~$5-10/mois
-- **Vercel**: Pro si nécessaire (rare)
+```javascript
+// Validation unique
+POST https://votre-projet.supabase.co/functions/v1/validate-email
+Body: { "to_email": "test@example.com" }
 
-## 🔧 Commandes Utiles
+// Validation bulk
+POST https://votre-projet.supabase.co/functions/v1/bulk-validate
+Body: { "input": ["email1@...", "email2@..."] }
 
-```bash
-# Développement
-npm run dev:frontend    # Démarre le frontend
-npm run dev:backend     # Démarre le backend
+// Statut
+GET https://votre-projet.supabase.co/functions/v1/bulk-status?job_id=XXX
 
-# Build
-npm run build:frontend  # Build le frontend
-npm run build:backend   # Build le backend
-
-# Déploiement
-npm run deploy:frontend # Déploie sur Vercel
-npm run deploy:backend  # Déploie sur Fly.io
-npm run deploy          # Déploie tout
-
-# Debug
-flyctl logs            # Logs backend
-flyctl status          # Status backend
+// Résultats
+GET https://votre-projet.supabase.co/functions/v1/bulk-results?job_id=XXX&format=csv
 ```
 
-## 🌟 Fonctionnalités Avancées
+## 🔐 Sécurité
 
-### Domaine Personnalisé
-
-**Vercel**: Settings → Domains → Ajoutez `votredomaine.com`  
-**Fly.io**: `flyctl certs add votredomaine.com`
-
-### Rate Limiting
-
-Configure dans `backend/backend_config.toml`:
-```toml
-[throttle]
-max_requests_per_minute = 100
-max_requests_per_day = 10000
-```
-
-### Base de Données
-
-Active PostgreSQL pour stocker l'historique:
-```bash
-flyctl postgres create
-flyctl postgres attach
-```
+- ✅ HTTPS automatique
+- ✅ Row Level Security (RLS) activé
+- ✅ Pas de stockage permanent des emails (optionnel)
+- ✅ Rate limiting via Supabase
 
 ## 🤝 Contribution
-
-Les contributions sont les bienvenues!
 
 1. Fork le projet
 2. Créez une branche: `git checkout -b feature/ma-feature`
 3. Commit: `git commit -m 'Ajout feature'`
 4. Push: `git push origin feature/ma-feature`
-5. Ouvrez une Pull Request
+5. Pull Request
 
 ## 📄 License
 
-MIT License - Voir [LICENSE.md](LICENSE.md)
+MIT License - Voir LICENSE.md
 
 ## 🆘 Support
 
-- 📖 **Documentation**: Voir les guides ci-dessus
-- 🐛 **Bug**: Ouvrez une issue
-- 💬 **Questions**: Discussions GitHub
-- 📧 **Email**: support@votredomaine.com
-
-## 🎓 Ressources
-
-- [Documentation Fly.io](https://fly.io/docs)
-- [Documentation Vercel](https://vercel.com/docs)
-- [Rust Book](https://doc.rust-lang.org/book/)
-- [React Docs](https://react.dev)
-
-## ⭐ Star le Projet
-
-Si ce projet vous aide, donnez-lui une étoile! ⭐
+- **Documentation**: [DEPLOIEMENT_BOLT.md](./DEPLOIEMENT_BOLT.md)
+- **Issues**: Créez une issue GitHub
+- **Questions**: Discussions GitHub
 
 ---
 
 <div align="center">
 
-**[Commencer Maintenant](./START_HERE.md)** | 
-**[Documentation](./README_SAAS.md)** | 
-**[Déployer](./DEPLOY_RAPIDE.md)**
+**Prêt en 1 clic! Cliquez sur "Deploy" et c'est parti! 🚀**
 
-Fait avec ❤️ et Rust 🦀
+Fait avec ❤️ et Supabase
+
+[Déployer Maintenant](./DEPLOIEMENT_BOLT.md) | [Documentation Complète](./DEPLOIEMENT_BOLT.md)
 
 </div>

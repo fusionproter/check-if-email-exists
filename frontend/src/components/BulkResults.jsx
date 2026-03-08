@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-const API_URL = import.meta.env.VITE_API_URL || '';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://0ec90b57d6e95fcbda19832f.supabase.co';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJib2x0IiwicmVmIjoiMGVjOTBiNTdkNmU5NWZjYmRhMTk4MzJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODE1NzQsImV4cCI6MTc1ODg4MTU3NH0.9I8-U0x86Ak8t2DGaIk0HfvTSLsAyzdnz-Nw00mMkKw';
 
 function BulkResults({ jobId, progress, onReset }) {
   const [downloading, setDownloading] = useState(false);
@@ -8,7 +9,11 @@ function BulkResults({ jobId, progress, onReset }) {
   const downloadResults = async (format = 'csv') => {
     setDownloading(true);
     try {
-      const response = await fetch(`${API_URL}/v1/bulk/${jobId}/results?format=${format}`);
+      const response = await fetch(`${SUPABASE_URL}/functions/v1/bulk-results?job_id=${jobId}&format=${format}`, {
+        headers: {
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error('Failed to download results');
