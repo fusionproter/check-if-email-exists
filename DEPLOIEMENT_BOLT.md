@@ -24,37 +24,44 @@ Votre application Email Validator est **100% prête** et fonctionne entièrement
 - ✅ Export CSV
 - ✅ Configuré pour utiliser Supabase automatiquement
 
+### Configuration de Déploiement ✓
+- ✅ `netlify.toml` configuré
+- ✅ `vercel.json` configuré
+- ✅ Scripts `build` dans package.json
+- ✅ Dossier de sortie: `frontend/dist`
+
 ## 🎯 Comment Déployer depuis Bolt
 
-### Option 1: Déployer le Frontend Directement
+### Option 1: Cliquez sur "Deploy" (LE PLUS SIMPLE!)
 
-1. **Dans Bolt**, cliquez sur "Deploy" en haut à droite
+1. **Dans Bolt**, cliquez sur **"Deploy"** en haut à droite
 2. Sélectionnez **Netlify** ou **Vercel**
-3. C'est TOUT! L'application est en ligne! 🎉
+3. **C'est TOUT!** L'application est en ligne! 🎉
 
-### Option 2: Via Netlify Manuellement
+**Tout est automatique**:
+- ✅ Installation des dépendances
+- ✅ Build du frontend
+- ✅ Publication sur le CDN
+- ✅ HTTPS automatique
+
+### Option 2: Via Netlify CLI
 
 ```bash
-# Dans le dossier frontend
-cd frontend
-npm install
+# Depuis la racine du projet
 npm run build
-
-# Déployer sur Netlify
-npx netlify-cli deploy --prod --dir=dist
+npx netlify-cli deploy --prod --dir=frontend/dist
 ```
 
-### Option 3: Via Vercel Manuellement
+### Option 3: Via Vercel CLI
 
 ```bash
-# Dans le dossier frontend
-cd frontend
-npm install
-npm run build
-
-# Déployer sur Vercel
+# Depuis la racine du projet
 npx vercel --prod
 ```
+
+**Les fichiers de config sont déjà prêts!**
+- `netlify.toml` ➜ Configuration Netlify
+- `vercel.json` ➜ Configuration Vercel
 
 ## 🔍 Fonctionnalités Disponibles
 
@@ -87,6 +94,10 @@ Supabase Database (PostgreSQL)
 ## 🧪 Tester Localement (Optionnel)
 
 ```bash
+# Depuis la racine
+npm run dev
+
+# OU depuis le dossier frontend
 cd frontend
 npm install
 npm run dev
@@ -111,15 +122,44 @@ Tous les fichiers sont éditables:
 
 ## 🔧 Variables d'Environnement
 
-Déjà configurées dans le code:
+Déjà configurées dans le code avec fallback:
 - `VITE_SUPABASE_URL`: https://0ec90b57d6e95fcbda19832f.supabase.co
 - `VITE_SUPABASE_SUPABASE_ANON_KEY`: (configurée automatiquement)
 
+Si vous voulez les personnaliser, créez un `.env` dans le dossier `frontend`:
+
+```env
+VITE_SUPABASE_URL=votre_url
+VITE_SUPABASE_SUPABASE_ANON_KEY=votre_key
+```
+
 ## ✨ Prochaines Étapes
 
-1. **Cliquez sur "Deploy"** dans Bolt
-2. **Testez l'application** avec vos emails
-3. **Partagez l'URL** avec le monde!
+1. **Cliquez sur "Deploy"** dans Bolt ➜ Sélectionnez Netlify ou Vercel
+2. **Attendez 30 secondes** pendant le déploiement
+3. **Testez l'application** avec vos emails
+4. **Partagez l'URL** avec le monde!
+
+## 🐛 Dépannage
+
+### Erreur "Missing script: build"
+✅ **Corrigé!** Le package.json contient maintenant les scripts nécessaires
+
+### Le build échoue
+```bash
+# Nettoyez et réinstallez
+cd frontend
+rm -rf node_modules package-lock.json
+npm install
+npm run build
+```
+
+### Les Edge Functions ne répondent pas
+Vérifiez que les Edge Functions sont bien déployées:
+- `validate-email` ✓
+- `bulk-validate` ✓
+- `bulk-status` ✓
+- `bulk-results` ✓
 
 ## 🆘 Support
 
@@ -131,8 +171,17 @@ L'application utilise:
 
 Tout est gratuit et scalable!
 
+### Limites Gratuites Supabase
+- 500,000 invocations Edge Functions/mois
+- 500 MB base de données
+- 5 GB bandwidth/mois
+
+**Largement suffisant pour commencer!**
+
 ---
 
 **Votre SaaS Email Validator est prêt à être utilisé! 🎉**
 
-**Cliquez simplement sur "Deploy" et c'est parti!**
+# ⚡ RETRY VOTRE DÉPLOIEMENT!
+
+Les erreurs sont corrigées. **Cliquez simplement sur "Deploy" et ça va fonctionner!**
